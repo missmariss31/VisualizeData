@@ -14,7 +14,7 @@
       var myChart = new dimple.chart(svg, data);
       var x = myChart.addCategoryAxis("x", ["Credit","Term"]);
       x.addOrderRule(["Bad","Poor","Fair","Good","Excellent"]);
-      x.title("Credit Type and Term(12,36,60) in months")
+      x.title = "Credit Type and Term(36,60,12) in months"
       var y = myChart.addMeasureAxis("y", "Count");
       var Rate = myChart.addSeries("Rate_Range", dimple.plot.bar);
       var leg = myChart.addLegend(440, 20, 640, 30,"center");
