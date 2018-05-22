@@ -1,0 +1,29 @@
+<html>
+<div id="chartContainer">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+  <script type="text/javascript">
+
+    d3.select('#chartContainer')
+      .append('h2')
+      .style("text-align", "center")
+      .text('Wisconsin Prosper Loans');
+
+    var svg = dimple.newSvg("#chartContainer", 1200, 450);
+    d3.csv("WI_Loan_Data.csv", function (data) {
+      var myChart = new dimple.chart(svg, data);
+      var x = myChart.addCategoryAxis("x", ["Credit","Term"]);
+      x.addOrderRule(["Bad","Poor","Fair","Good","Excellent"]);
+      x.title("Credit Type and Term(12,36,60) in months")
+      var y = myChart.addMeasureAxis("y", "Count");
+      var Rate = myChart.addSeries("Rate_Range", dimple.plot.bar);
+      var leg = myChart.addLegend(440, 20, 640, 30,"center");
+      var story = myChart.setStoryboard("Rate_Range");
+      story.frameDuration = 5000;
+      story.addOrderRule(["0-4.99%","5-9.99%","10-14.99%","15-19.99%","20-24.99%","25-29.99%","30-34.99%","35-39.99%","40-44.99%","45-49.99%"]);
+      
+      myChart.draw();
+    });
+  </script>
+</div>
+</html>
