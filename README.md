@@ -1,7 +1,9 @@
 
 # Data Visualization with D3 and Dimple.js
 
-In this project, we'll take a look at our Prosper Loan data again from the Exploratory Data Analysis project.  Since our dataset is quite large, I've chosen to take a closer look at the Wisconsin loans in particular for this project.  I chose Wisconsin because it is my home state and I was curious to see what credit scores and interest rates are common for personal loans from Prosper in this area.  
+In this project, we'll take a look at our Prosper Loan data again from the Exploratory Data Analysis project.  Since our dataset is quite large, I've chosen to take a closer look at the Wisconsin loans in particular for this project.  I chose Wisconsin because it is my home state and I was curious to see what credit scores and interest rates are common for personal loans from Prosper in this area.
+
+[Jump to Project Requirements](#Requirements)
 
 
 ```python
@@ -341,73 +343,47 @@ print "WI Max Upper Credit Score", WI_Prosper_Loan_Data.CreditScoreRangeUpper.ma
 WI_Prosper_Loan_Data.to_csv('WI_Loan_Data.csv')
 ```
 
+<a id='Requirements'></a>
 
-```python
-%%html
+Requirements:
 
-<html>
-<div id="chartContainer">
-  <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
-  <script type="text/javascript">
+- Summary - in no more than 4 sentences, briefly introduce your data visualization and add any context that can help readers understand it
+- Design - explain any design choices you made including changes to the visualization after collecting feedback
+- Feedback - include all feedback you received from others on your visualization from the first sketch to the final visualization
+- Resources - list any sources you consulted to create your visualization
 
-    d3.select('#chartContainer')
-      .append('h2')
-      .style("text-align", "center")
-      .text('Wisconsin Prosper Loans');
+## Summary
 
-    var svg = dimple.newSvg("#chartContainer", 1200, 450);
-    d3.csv("WI_Loan_Data.csv", function (data) {
-      var myChart = new dimple.chart(svg, data);
-      var x = myChart.addCategoryAxis("x", "Credit");
-      x.addOrderRule(["Bad","Poor","Fair","Good","Excellent"]);
-      var y = myChart.addMeasureAxis("y", "Count");
-      var Rate = myChart.addSeries("Rate_Range", dimple.plot.bar);
-      var leg = myChart.addLegend(240, 20, 640, 30,"center");
-      var story = myChart.setStoryboard("Rate_Range");
-      story.frameDuration = 5000;
-      story.addOrderRule(["0-4.99%","5-9.99%","10-14.99%","15-19.99%","20-24.99%","25-29.99%","30-34.99%","35-39.99%","40-44.99%","45-49.99%"]);
-      
-      myChart.draw();
-    });
-  </script>
-</div>
-</html>
-```
+My data visualization created using d3, dimple.js, was created using a portion of the [Prosper Loan Dataset]('https://www.kaggle.com/jschnessl/prosperloans/data').  I extracted all of the loans with 'BorrowerState' equal to 'WI', as Wisconsin is my home state.  My goal was to show the change in the number of people with each type of credit as interest rates rise, thus revealing a trend toward more people with bad/poor credit as the interest rate rises.
 
+## Design
 
+I originally thought I'd use a bubble plot, showing various sized circles for each of the three loan terms.  The chart looked a bit cluttered to me and didn't look like the best way to visualize drastic changes in number of people per group.  The bar chart looked much better and the animation gave me just what I was looking for.  It was easy to interpret and had a clear 'story' to tell.  When designing the bar chart, I started out by including the 'Term' variable within the x-axis.  But, that took away from the story I was trying to tell and kept the viewers eyes on the difference between loan terms instead of what should be an obvious trend between credit type and interest rates.  
 
-<html>
-<div id="chartContainer">
-  <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
-  <script type="text/javascript">
+After getting some feedback, I changed a few more things...
 
-    d3.select('#chartContainer')
-      .append('h2')
-      .style("text-align", "center")
-      .text('Wisconsin Prosper Loans');
+## Feedback and Improvements
 
-    var svg = dimple.newSvg("#chartContainer", 1200, 450);
-    d3.csv("WI_Loan_Data.csv", function (data) {
-      var myChart = new dimple.chart(svg, data);
-      var x = myChart.addCategoryAxis("x", "Credit");
-      x.addOrderRule(["Bad","Poor","Fair","Good","Excellent"]);
-      var y = myChart.addMeasureAxis("y", "Count");
-      var Rate = myChart.addSeries("Rate_Range", dimple.plot.bar);
-      var leg = myChart.addLegend(240, 20, 640, 30,"center");
-      var story = myChart.setStoryboard("Rate_Range");
-      story.frameDuration = 5000;
-      story.addOrderRule(["0-4.99%","5-9.99%","10-14.99%","15-19.99%","20-24.99%","25-29.99%","30-34.99%","35-39.99%","40-44.99%","45-49.99%"]);
-      
-      myChart.draw();
-    });
-  </script>
-</div>
-</html>
+See Revisions at https://gist.github.com/missmariss31/0406d32621fba51797489339da3bfeb5
 
+<b>First Draft:</b>
+- After getting some feedback on an earlier visualization, I changed the storyboard interval to allow the viewer more time to take in each transition through interest rate ranges.  I also added the 'Count' to the y-axis after I realized it was summing up all of the values in my earlier selection of 'BorrowerRate' and not counting them.  I thought about using the bubble chart, but I felt that it caused crowding and didn't tell the story in the best way.
 
-After getting some feedback on an earlier visualization, I changed the storyboard interval to allow the viewer more time to take in each transition through interest rate ranges.  I also added the 'Count' to the y-axis after I realized it was summing up all of the values in my earlier selection of 'BorrowerRate' and not counting them.
+<b>Second Draft:</b>
+- I took out the sectioning of the x axis that included 'Term' as it didn't add anything of value.  In fact, it took away from the credit/rate correlation story.  After further feedback, I made the legend stop blinking with every transition (I guess that's "annoying") by adding 'myChart.legends = [];' after the chart has been drawn. 
+
+<b>Third Draft:</b>
+- After getting my final review of the visualization, I cleaned it up as much as I could without distracting from the goal/story.  I increased font size and gave the x-axis a clear label, 'Credit Type.'  I also changed the title to reflect the variables used as well as the dataset.
+
+In order to view the final data visualization, go to http://bl.ocks.org/missmariss31/raw/0406d32621fba51797489339da3bfeb5/
+
+## Resources
+
+Documentation
+- https://github.com/PMSI-AlignAlytics/dimple/wiki
+
+Examples
+- http://dimplejs.org/advanced_examples_index.html
 
 
 ```python
