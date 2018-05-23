@@ -5,31 +5,101 @@
   <script type="text/javascript">
 
     d3.select('#chartContainer')
-      .append('h2')
+      .append('h1')
+      .text('Prosper Loan Rates for Wisconsin Borrowers')
       .style("text-align", "center")
-      .style("fontSize","18px")
-      .text('Wisconsin Prosper Loans Credit Type/Interest Rate');
+      .append('h3')
+      .text('Click Legend Shapes During Animation to Interact')
+      .style('font-size','small')
+      .append('h4')
+      .text('See Excellent Credit Get Excellent Rates for Personal Loans')
+      .append('h2')
+      .text('*Click HERE to Pause/Play Animation for Term(months) Category');
+
 
     var svg = dimple.newSvg("#chartContainer", 1200, 475);
+
     d3.csv("WI_Loan_Data.csv", function (data) {
+
       var myChart = new dimple.chart(svg, data);
-      var x = myChart.addCategoryAxis("x", "Credit");
+
+      var x = myChart.addCategoryAxis("x", ["Credit","Rate_Range"]);
       x.addOrderRule(["Bad","Poor","Fair","Good","Excellent"]);
       x.title = "Credit Type";
       x.fontSize = '16px';
+
       var y = myChart.addMeasureAxis("y", "Count");
       y.fontSize = '16px';
+
       var Rate = myChart.addSeries("Rate_Range", dimple.plot.bar);
-      var leg = myChart.addLegend(440, 10, 640, 20,"center");
-      var story = myChart.setStoryboard("Rate_Range");
+      Rate.addOrderRule(["0-4.99%","5-9.99%","10-14.99%","15-19.99%","20-24.99%","25-29.99%","30-34.99%","35-39.99%","40-44.99%","45-49.99%"]);
+
+      var myLegend = myChart.addLegend(145, 25, 840, 20,"right");
+      myLegend.fontSize = '14px';
+
+      var story = myChart.setStoryboard("Term");
+      story.frameDuration = 2000;
       story.fontSize = '16px';
-      story.addOrderRule(["0-4.99%","5-9.99%","10-14.99%","15-19.99%","20-24.99%","25-29.99%","30-34.99%","35-39.99%","40-44.99%","45-49.99%"]);
-      story.frameDuration = 6000;
 
       myChart.draw();
       myChart.legends = [];
+
+      // play button click handler
+      function play() {
+        story.startAnimation();
+      }
+
+      // pause button click handler
+      function pause() {
+        story.pauseAnimation();
+      }
+
+      var paused = false;
+
+      d3.select('h2')
+        .on("click", function (g){
+          if (paused) {
+            play();
+            paused = false;
+          }else {
+            pause();
+            paused = true;
+          }
+        });
       
-    });
+      var filterValues = dimple.getUniqueValues(data, "Rate_Range");
+      // Get all the rectangles from legend
+      myLegend.shapes.selectAll("rect")
+        // Add a click event to each rectangle
+        .on("click", function (e) {
+          
+          var hide = false;
+          var newFilters = [];
+          // If the filters contain the clicked shape hide it
+          filterValues.forEach(function (f) {
+            if (f === e.aggField.slice(-1)[0]) {
+              hide = true;
+            } else {
+              newFilters.push(f);
+            }
+          });
+          // Hide the shape or show it
+          if (hide) {
+            d3.select(this).style("opacity", 0.2);
+          } else {
+            newFilters.push(e.aggField.slice(-1)[0]);
+            d3.select(this).style("opacity", 0.8);
+          }
+          // Update the filters
+          filterValues = newFilters;
+          // Filter the data
+          myChart.data = dimple.filterData(data, "Rate_Range", filterValues);
+          
+          if (!paused) {
+            myChart.draw();
+          } 
+        });
+      });
   </script>
   </div>
 </html>

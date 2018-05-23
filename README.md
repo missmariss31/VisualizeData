@@ -354,13 +354,11 @@ Requirements:
 
 ## Summary
 
-My data visualization created using d3, dimple.js, was created using a portion of the [Prosper Loan Dataset]('https://www.kaggle.com/jschnessl/prosperloans/data').  I extracted all of the loans with 'BorrowerState' equal to 'WI', as Wisconsin is my home state.  My goal was to show the change in the number of people with each type of credit as interest rates rise, thus revealing a trend toward more people with bad/poor credit as the interest rate rises.
+My data visualization built using d3, dimple.js, was created using a portion of the [Prosper Loan Dataset]('https://www.kaggle.com/jschnessl/prosperloans/data').  I extracted all of the loans with 'BorrowerState' equal to 'WI', as Wisconsin is my home state.  My goal was to show the change in the number of people with each type of credit as interest rates rise, thus revealing that Wisconsinites with Good/Excellent credit are more likely to get lower rates.  Showing each group by term adds more detail to the narrative, as 36 month terms are more common and rates may differ depending on the term.  
 
 ## Design
 
-I originally thought I'd use a bubble plot, showing various sized circles for each of the three loan terms.  The chart looked a bit cluttered to me and didn't look like the best way to visualize drastic changes in number of people per group.  The bar chart looked much better and the animation gave me just what I was looking for.  It was easy to interpret and had a clear 'story' to tell.  When designing the bar chart, I started out by including the 'Term' variable within the x-axis.  But, that took away from the story I was trying to tell and kept the viewers eyes on the difference between loan terms instead of what should be an obvious trend between credit type and interest rates.  
-
-After getting some feedback, I changed a few more things...
+I originally thought I'd use a bubble plot, showing various sized circles for each of the three loan terms.  The chart looked a bit cluttered to me and didn't look like the best way to visualize drastic changes in number of people per group.  The bar chart looked much better and the animation gave me just what I was looking for.  It was easy to interpret and had a clear 'story' to tell.  When designing the bar chart, I started out by including the 'Term' variable within the x-axis.  But, that took away from the story I was trying to tell and kept the viewers eyes on the difference between loan terms instead of what should be an obvious trend between credit type and interest rates.  After getting further feedback, I changed my barplot to a dodged bar plot in order to give the viewer a way to compair each rate group side by side.  I also added interaction capabilities to engage the viewer as they reveal that only borrowers with Good/Excellent credit get the best/lowest rates, and those with Bad credit are going to get the higher rates.
 
 ## Feedback and Improvements
 
@@ -373,7 +371,10 @@ See Revisions at https://gist.github.com/missmariss31/0406d32621fba51797489339da
 - I took out the sectioning of the x axis that included 'Term' as it didn't add anything of value.  In fact, it took away from the credit/rate correlation story.  After further feedback, I made the legend stop blinking with every transition (I guess that's "annoying") by adding 'myChart.legends = [];' after the chart has been drawn. 
 
 <b>Third Draft:</b>
-- After getting my final review of the visualization, I cleaned it up as much as I could without distracting from the goal/story.  I increased font size and gave the x-axis a clear label, 'Credit Type.'  I also changed the title to reflect the variables used as well as the dataset.
+- After getting my third review of the visualization, I cleaned it up as much as I could without distracting from the goal/story.  I increased font size and gave the x-axis a clear label, 'Credit Type.'  I also changed the title to reflect the variables used as well as the dataset.
+
+<b>Fourth Draft:</b>
+- After some great feedback from my project reviewer, I got back to work and changed the single bar plot to a dodged bar plot to make it easier for the viewer to compare the difference in rate groups.  I also added interaction and changed the animation to reflect the difference in loans with 36month, 60month, and 12month terms.  In order to give the viewer an idea of what they might discover, prompting them to isolate the lower rates, I added a small header.  I was also able to give the viewer a way to start/stop the animation in order for them to take in all of the detail in each frame.
 
 In order to view the final data visualization, go to http://bl.ocks.org/missmariss31/raw/0406d32621fba51797489339da3bfeb5/
 
